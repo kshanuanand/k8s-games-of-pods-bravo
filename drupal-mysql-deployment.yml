@@ -6,6 +6,7 @@ metadata:
   labels:
     app: drupal-mysql
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: drupal-mysql
@@ -19,27 +20,27 @@ spec:
       containers:
         - image: mysql:5.7
           name: drupal-mysql
-  env:
-    - name: MYSQL_ROOT_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: drupal-mysql-secret
-          key: MYSQL_ROOT_PASSWORD
-    - name: MYSQL_DATABASE
-      valueFrom:
-        secretKeyRef:
-          name: drupal-mysql-secret
-          key: MYSQL_DATABASE
-    - name: MYSQL_USER
-      valueFrom:
-        secretKeyRef:
-          name: drupal-mysql-secret
-          key: MYSQL_USER
-    volumeMounts:
-      - name: pvc
-        mountPath: /var/lib/mysql
-        subPath: dbdata
-    volumes:
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: drupal-mysql-secret
+                key: MYSQL_ROOT_PASSWORD
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: drupal-mysql-secret
+                key: MYSQL_DATABASE
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: drupal-mysql-secret
+                key: MYSQL_USER
+          volumeMounts:
+          - name: pvc
+            mountPath: /var/lib/mysql
+            subPath: dbdata
+      volumes:
       - name: pvc
         persistentVolumeClaim:
           claimName: drupal-mysql-pvc
